@@ -4,6 +4,7 @@ public class IndivWordFreq {
 
     public IndivWordFreq(String enteredWord) {
         word = enteredWord;
+        count = 1;
     }
 
     public void incrementCount() {

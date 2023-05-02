@@ -6,6 +6,7 @@ import java.util.*;
 public class WordList {
     private List<String> unalteredList = new ArrayList<String>();
     private List<ParaWord> alteredList = new ArrayList<ParaWord>();
+    private List<IndivWordFreq> frequencyList = new ArrayList<IndivWordFreq>();
 
     public WordList(String filePath) {
         String line;
@@ -48,6 +49,26 @@ public class WordList {
                     endQuotes = false;
                 }
             }
+    }
+
+    public void wordFrequencyCounter() {
+        ParaWord listElement;
+        IndivWordFreq itemTemp;
+        while (!alteredList.isEmpty()) {
+            listElement = alteredList.get(0);
+            itemTemp = new IndivWordFreq(listElement.getWord());
+            for (ParaWord checkElement:alteredList) {
+                if (checkElement.getWord().equals(listElement.getWord()) && checkElement.getChecked() == false) {
+                    itemTemp.incrementCount();
+                    checkElement.setChecked(true);
+                }
+            }
+            frequencyList.add(itemTemp);
+        }
+
+        for (ParaWord element:alteredList) {
+            element.setChecked(false);
+        }
     }
 
     public String getWordListPos(int index) {
