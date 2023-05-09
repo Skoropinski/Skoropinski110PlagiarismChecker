@@ -41,7 +41,7 @@ public class WordList {
                     }
 
                 }
-                if ((correctedWord.length() > 0) && (inQuotes == false)) {
+                if (inQuotes == false) {
                     alteredList.add(new ParaWord(correctedWord.toString()));
                 }
                 if (endQuotes == true) {
@@ -52,18 +52,26 @@ public class WordList {
     }
 
     public void wordFrequencyCounter() {
-        ParaWord listElement;
         IndivWordFreq itemTemp;
-        while (!alteredList.isEmpty()) {
-            listElement = alteredList.get(0);
-            itemTemp = new IndivWordFreq(listElement.getWord());
-            for (ParaWord checkElement:alteredList) {
-                if (checkElement.getWord().equals(listElement.getWord()) && checkElement.getChecked() == false) {
-                    itemTemp.incrementCount();
-                    checkElement.setChecked(true);
+
+        for (ParaWord element:alteredList) {
+            element.setChecked(false);
+        }
+
+        for (ParaWord listElement:alteredList) {
+            if (listElement.getChecked() == false ) {
+                listElement.setChecked(true);
+                itemTemp = new IndivWordFreq(listElement.getWord());
+                for (ParaWord checkElement:alteredList) {
+                    if (checkElement.getWord().equals(listElement.getWord()) && checkElement.getChecked() == false) {
+                        itemTemp.incrementCount();
+                        checkElement.setChecked(true);
+                    }
+                }
+                if (itemTemp.getWord().length() > 0) {
+                    frequencyList.add(itemTemp);
                 }
             }
-            frequencyList.add(itemTemp);
         }
 
         for (ParaWord element:alteredList) {
@@ -71,7 +79,27 @@ public class WordList {
         }
     }
 
-    public String getWordListPos(int index) {
+    public ParaWord getAlteredListPos(int index) {
         return alteredList.get(index);
+    }
+
+    public int getAlteredListLength() {
+        return alteredList.size();
+    }
+
+    public String getUnalteredListPos(int index) {
+        return unalteredList.get(index);
+    }
+
+    public int getUnalteredListLength() {
+        return unalteredList.size();
+    }
+
+    public IndivWordFreq getFrequencyListPos(int index) {
+        return frequencyList.get(index);
+    }
+
+    public int getFrequencyListLength() {
+        return frequencyList.size();
     }
 }
