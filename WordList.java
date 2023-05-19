@@ -14,6 +14,7 @@ public class WordList {
     private List<String> unalteredList = new ArrayList<String>();
     private List<ParaWord> alteredList = new ArrayList<ParaWord>();
     private List<IndivWordFreq> frequencyList = new ArrayList<IndivWordFreq>();
+    private List<Integer> quotesIndexes = new ArrayList<Integer>();
 
     /**
      * Creates an instance of the WordList class, taking in a filename, reading
@@ -50,16 +51,19 @@ public class WordList {
                     if (!Character.isLetterOrDigit(correctedWord.charAt(i)) && !(correctedWord.charAt(i) == '-' && i != 0)) {
                         if((correctedWord.charAt(i) == '"') && (inQuotes == false) && (includeQuotes == false)) {
                             inQuotes = true;
+                            quotesIndexes.add(i);
                         } else {
-                            if ((correctedWord.charAt(i) == '"') && (inQuotes == true))
+                            if ((correctedWord.charAt(i) == '"') && (inQuotes == true)) {
                                 endQuotes = true;
+                                quotesIndexes.add(i);
+                            }
                         }
                         correctedWord.deleteCharAt(i);
                         i = i - 1;
                     }
 
                 }
-                if (inQuotes == false) {
+                if (inQuotes == false && correctedWord.length() > 0) {
                     alteredList.add(new ParaWord(correctedWord.toString()));
                 }
                 if (endQuotes == true) {

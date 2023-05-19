@@ -10,20 +10,15 @@ public class PhraseMatcher {
         minMatchLen = enteredLength;
     }
 
-    public double MatchFunction() {
+    public int MatchFunction() {
         int totalLen, totalMatchedWords = 0, phraseLen = 0, tempi;
         double returnPercentage;
         boolean continueChecking = true;
-        List<Integer> firstHighlightedIndex = new ArrayList<Integer>(), secondHighlightedIndex = new ArrayList<Integer>();
-
-        firstFile.cleanWordList(true);
-        firstFile.wordFrequencyCounter();
-        secondFile.cleanWordList(true);
-        secondFile.wordFrequencyCounter();
-        totalLen = firstFile.getWordCount() + secondFile.getWordCount();
+        List<Integer> firstHighlightedIndex = new ArrayList<Integer>(), secondHighlightedIndex = new ArrayList<Integer>(), tempOne = new ArrayList<Integer>(), tempTwo = new ArrayList<Integer>();
 
         firstFile.cleanWordList(false);
         firstFile.wordFrequencyCounter();
+        totalLen = firstFile.getWordCount();
         secondFile.cleanWordList(false);
         secondFile.wordFrequencyCounter();
 
@@ -32,10 +27,10 @@ public class PhraseMatcher {
             if (firstFile.getAlteredListPos(i).getChecked() == false) {
                 for (int j = 0; j < secondFile.getAlteredListLength(); j++) {
                     if (secondFile.getAlteredListPos(j).getChecked() == false) {
-                        while (firstFile.getAlteredListPos(i).getWord().equals(secondFile.getAlteredListPos(j).getWord()) && continueChecking) {
-                            phraseLen = phraseLen + 2;
-                            firstFile.getAlteredListPos(i).setChecked(true);
-                            secondFile.getAlteredListPos(j).setChecked(true);
+                        while (firstFile.getAlteredListPos(i).getWord().equals(secondFile.getAlteredListPos(j).getWord()) && continueChecking && secondFile.getAlteredListPos(j).getChecked() == false && firstFile.getAlteredListPos(i).getChecked() == false) {
+                            phraseLen++;
+                            tempOne.add(i);
+                            tempTwo.add(j);
                             firstHighlightedIndex.add(i);
                             secondHighlightedIndex.add(j);
                             if (i + 1 < firstFile.getAlteredListLength() && j + 1 < secondFile.getAlteredListLength()) {
@@ -47,7 +42,16 @@ public class PhraseMatcher {
                             }
                         if (phraseLen >= minMatchLen) {
                             totalMatchedWords += phraseLen;
+                            for (int element:tempOne) {
+                                firstFile.getAlteredListPos(element).setChecked(true);
+                            }
+                           
+                            for (int element:tempTwo) {
+                                secondFile.getAlteredListPos(element).setChecked(true);
+                            }
                         }
+                        tempOne.clear();
+                        tempTwo.clear();
                         i = tempi;
                         phraseLen = 0;
                         continueChecking = true;
@@ -55,9 +59,16 @@ public class PhraseMatcher {
                 }  
             }
         }
-        System.out.println(totalMatchedWords + " " + totalLen);
+
+        for (int element:firstHighlightedIndex){
+            firstFile.getAlteredListPos(element).setHighlighted(true);
+        }
+        for (int element:secondHighlightedIndex){
+            secondFile.getAlteredListPos(element).setHighlighted(true);
+        }
+
         returnPercentage = ( (double)totalMatchedWords / (double) totalLen) * 100;
-        return returnPercentage;
+        return (int) Math.round(returnPercentage);
     }
 
 
