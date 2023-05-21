@@ -109,6 +109,21 @@ public class WordList {
     }
 
     /**
+     * Returns the count of a word in the frequency word list (0 if not in the list)
+     * @param wordToLook The string that is being looked for
+     * @return The number of times the parameter string appears in the text file
+     */
+    public int findWordCount(String wordToLook) {
+        int foundWordCount = 0;
+        for (IndivWordFreq element: frequencyList) {
+            if (element.getWord().equals(wordToLook)) {
+                foundWordCount = element.getCount();
+            }
+        }
+        return foundWordCount;
+    }
+
+    /**
      * Returns the word count of the file stored in this list
      * @return Int containing the word count of the file
      */

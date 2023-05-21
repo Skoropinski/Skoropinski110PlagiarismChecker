@@ -85,23 +85,28 @@ public class MainMenu implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == lengthButton) {
-            phraseCheckerMin = Integer.parseInt(lengthEntry.getText());
-            mainPanel.removeAll();
-            for (int i = 0; i < 6; i++) {
-                tablePanels[i].removeAll();
+            try {
+                phraseCheckerMin = Integer.parseInt(lengthEntry.getText());
+                mainPanel.removeAll();
+                for (int i = 0; i < 6; i++) {
+                    tablePanels[i].removeAll();
+                }
+                setFilePairs();
+                setTablesPanel();
+                mainPanel.add(lengthEntryPanel);
+                for (int i = 0; i < 6; i++) {
+                    mainPanel.add(tablePanels[i]);
+                }
+                frame.repaint();
+                frame.setSize(frame.getWidth(), frame.getHeight() + 1);
             }
-            setFilePairs();
-            setTablesPanel();
-            mainPanel.add(lengthEntryPanel);
-            for (int i = 0; i < 6; i++) {
-                mainPanel.add(tablePanels[i]);
+            catch (Exception ex) {
+
             }
-            frame.repaint();
-            frame.setSize(frame.getWidth() + 1, frame.getHeight());
         }
         else if (e.getSource() instanceof JButton) {
             String text = ((JButton) e.getSource()).getText();
-            
+            SubMenu newSubMenu = new SubMenu((int) text.charAt(5) - 48, (int) text.charAt(14) - 48, filePath);
         }
     }
 
@@ -168,7 +173,7 @@ public class MainMenu implements ActionListener{
         mainPanel.setLayout(l);
         lengthEntryPanel.setLayout(b);
 
-        JLabel instructions = new JLabel("Please select a pair");
+        JLabel instructions = new JLabel("<html>Welcome to the plagiarism checker, on <br/>the right is all the phrase match percentages <br/>of the file pairs, click on a pair for further <br/>details. You can adjust the minimum phrase match <br/>length through the box below (set to 4 by default).</html>", SwingConstants.CENTER);
         lengthEntryPanel.add("North", instructions);
         lengthEntry.setSize(100, 10);
         lengthEntryPanel.add("Center", lengthEntry);
