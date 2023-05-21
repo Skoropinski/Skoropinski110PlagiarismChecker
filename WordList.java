@@ -14,7 +14,6 @@ public class WordList {
     private List<String> unalteredList = new ArrayList<String>();
     private List<ParaWord> alteredList = new ArrayList<ParaWord>();
     private List<IndivWordFreq> frequencyList = new ArrayList<IndivWordFreq>();
-    private List<Integer> quotesIndexes = new ArrayList<Integer>();
 
     /**
      * Creates an instance of the WordList class, taking in a filename, reading
@@ -39,23 +38,20 @@ public class WordList {
 
     /**
      * Creates a list based on the raw parsed text from the document to remove all punctuation (aside from mid word hyphens)
-     * and turning it to lower case, including to choice to either include words within quotes or not
-     * @param includeQuotes Boolean value as to whether words within quotes should be included
+     * and turning it to lower case
      */
-    public void cleanWordList(boolean includeQuotes) {
+    public void cleanWordList() {
         alteredList.clear();
         boolean inQuotes = false, endQuotes = false;
             for (String element:unalteredList) {
                 StringBuilder correctedWord = new StringBuilder(element.toLowerCase());
                 for (int i = 0; i < correctedWord.length(); i++) {
                     if (!Character.isLetterOrDigit(correctedWord.charAt(i)) && !(correctedWord.charAt(i) == '-' && i != 0)) {
-                        if((correctedWord.charAt(i) == '"') && (inQuotes == false) && (includeQuotes == false)) {
+                        if((correctedWord.charAt(i) == '"') && (inQuotes == false)) {
                             inQuotes = true;
-                            quotesIndexes.add(i);
                         } else {
                             if ((correctedWord.charAt(i) == '"') && (inQuotes == true)) {
                                 endQuotes = true;
-                                quotesIndexes.add(i);
                             }
                         }
                         correctedWord.deleteCharAt(i);
@@ -63,8 +59,10 @@ public class WordList {
                     }
 
                 }
-                if (inQuotes == false && correctedWord.length() > 0) {
-                    alteredList.add(new ParaWord(correctedWord.toString()));
+                if (inQuotes == false) {
+                    alteredList.add(new ParaWord(correctedWord.toString(), false));
+                } else {
+                    alteredList.add(new ParaWord(correctedWord.toString(), true));
                 }
                 if (endQuotes == true) {
                     inQuotes = false;
@@ -78,17 +76,22 @@ public class WordList {
      * and checking that word against every other word in the list, counting each time that word appears
      * and marking them as checked for future loops through the text, resulting in a list with the 
      * number of times each unique word appears.
+     * @param includeQuotes Boolean to decide whether words within quotes should be included in the count
      */
-    public void wordFrequencyCounter() {
+    public void wordFrequencyCounter(boolean includeQuotes) {
         IndivWordFreq itemTemp;
         frequencyList.clear();
 
         for (ParaWord element:alteredList) {
-            element.setChecked(false);
+            if (element.getInQuotes() && !includeQuotes) {
+                element.setChecked(true);
+            } else {
+                element.setChecked(false);
+            }
         }
 
         for (ParaWord listElement:alteredList) {
-            if (listElement.getChecked() == false ) {
+            if (listElement.getChecked() == false && listElement.getWord().length() != 0) {
                 listElement.setChecked(true);
                 itemTemp = new IndivWordFreq(listElement.getWord());
                 for (ParaWord checkElement:alteredList) {
@@ -124,7 +127,7 @@ public class WordList {
     }
 
     /**
-     * Returns the word count of the file stored in this list
+     * Returns the word count of the file stored in this list (that aren't contained within quotation marks)
      * @return Int containing the word count of the file
      */
     public int getWordCount() {

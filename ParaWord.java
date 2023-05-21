@@ -7,15 +7,18 @@ public class ParaWord {
     private String word;
     private boolean checked;
     private boolean highlighted;
+    private boolean inQuotes;
 
     /**
      * This creates a new instance of the ParaWord class, setting both checked and highlighted to their default false state
      * @param enteredWord The word to be stored in this ParaWord instance
+     * @param enteredQuotes The boolean value to signify whther this word is within quotes
      */
-    public ParaWord(String enteredWord) {
+    public ParaWord(String enteredWord, boolean enteredQuotes) {
         checked = false;
         highlighted = false;
         word = enteredWord;
+        inQuotes = enteredQuotes;
     }   
 
     /**
@@ -24,6 +27,22 @@ public class ParaWord {
      */
     public String getWord() {
         return word;
+    }
+
+    /**
+     * Sets the boolean of whether this word is in quotes
+     * @param enteredQuotes Entered quotes value
+     */
+    public void setInQuotes(boolean enteredQuotes) {
+        inQuotes = enteredQuotes;
+    }
+
+    /**
+     * Returns the boolean of whether this word is in quotes
+     * @return Stored quotes value
+     */
+    public boolean getInQuotes() {
+        return inQuotes;
     }
 
     /**

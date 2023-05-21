@@ -106,7 +106,7 @@ public class MainMenu implements ActionListener{
         }
         else if (e.getSource() instanceof JButton) {
             String text = ((JButton) e.getSource()).getText();
-            SubMenu newSubMenu = new SubMenu((int) text.charAt(5) - 48, (int) text.charAt(14) - 48, filePath);
+            SubMenu newSubMenu = new SubMenu((int) text.charAt(5) - 48, (int) text.charAt(14) - 48, filePath, phraseCheckerMin);
         }
     }
 
