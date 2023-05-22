@@ -1,15 +1,31 @@
 import java.util.*;
 
+/**
+ * This class finds the percentage phrase match between 2 given files 
+ */
 public class PhraseMatcher {
     private WordList firstFile, secondFile;
     int minMatchLen;
 
+    /**
+     * Sets up the phrase matcher, by getting the file names and minimum phrase length
+     * @param firstEntered First file name
+     * @param secondEntered Second file name
+     * @param enteredLength Minimum phrase length to count as a match
+     */
     public PhraseMatcher(WordList firstEntered, WordList secondEntered, int enteredLength) {
         firstFile = firstEntered;
         secondFile = secondEntered;
         minMatchLen = enteredLength;
     }
 
+    /**
+     * Finds the phrase match percentage by finding every phrase equal to or larger in
+     * length to the minimu phrase length variable and adding up very word within them,
+     * and then dividing that by the number of words in the first file and multiplied
+     * by 100 to get the phrase match percentage of the first file compared to the second
+     * @return Phrase match percentage
+     */
     public int MatchFunction() {
         int totalLen, totalMatchedWords = 0, phraseLen = 0, tempi;
         double returnPercentage;

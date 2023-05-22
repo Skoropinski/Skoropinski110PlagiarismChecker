@@ -1,7 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+/**
+ * This class is for printing the sub menu of a pair of files.
+ * It prints out the list of word frequencies of every word in both file compared to the other file,
+ * the text of the files where the matched phrases are highlighted and
+ * a text field for users to search for word frequencies within the two files
+ */
 public class SubMenu implements ActionListener{
     private WordList fileOne, fileTwo;
     private int fileOneName, fileTwoName, phraseLength;
@@ -13,6 +18,9 @@ public class SubMenu implements ActionListener{
     private String wordToFind, printedStrings;
     private JLabel wordFindResults = new JLabel("", SwingConstants.CENTER), wordFindExplan = new JLabel("Please enter a word to find its frequency", SwingConstants.CENTER), printedText = new JLabel("");
 
+    /**
+     * Sets up the frame of the sub menu, including title, close action, size and making it visible
+     */
     private void setFrame() {
         frame.setVisible(true);
         frame.setTitle("File " + fileOneName + " & File " + fileTwoName + " Information");
@@ -20,6 +28,10 @@ public class SubMenu implements ActionListener{
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    /**
+     * Sets up the panel for the finding word frequency feature, placing the instruction text, button, text field and
+     * results in the correct place
+     */
     private void setFindWordPanel() {
         findWordPanel.setLayout(new BorderLayout());
         findWordPanel.add("North", wordFindExplan);
@@ -33,10 +45,14 @@ public class SubMenu implements ActionListener{
         findWordPanel.add("South", wordFindResults);
     }
 
+    /**
+     * Formats the text when printing out the text files so that phrased matched text is red and text in quotes
+     * is blue, as well as new lines for ease of reading using html
+     */
     private void formatPrintedText() {
         PhraseMatcher matcher = new PhraseMatcher(fileOne, fileTwo, phraseLength);
         matcher.MatchFunction();
-        printedStrings = "<html><br/>File " + fileOneName + ":<br/>";
+        printedStrings = "<html><br/><font color = 'red'>Red</font> text shows matched phrases<br/><font color = 'blue'>Blue</font> text shows text in quotes (not checked during phrase matching)<br/><br/>File " + fileOneName + ":<br/>";
         for (int i = 0; i < fileOne.getUnalteredListLength(); i++) {
             if (fileOne.getAlteredListPos(i).getInQuotes() == true) {
                 printedStrings = printedStrings + "<font color = 'blue'>";
@@ -52,7 +68,6 @@ public class SubMenu implements ActionListener{
         }
 
         printedStrings = printedStrings + "<br/><br/>File " + fileTwoName + ":<br/>";
-        System.out.println(fileTwo.getUnalteredListLength() + " " + fileTwo.getAlteredListLength());
         for (int i = 0; i < fileTwo.getUnalteredListLength(); i++) {
             if (fileTwo.getAlteredListPos(i).getInQuotes() == true) {
                 printedStrings = printedStrings + "<font color = 'blue'>";
@@ -73,6 +88,11 @@ public class SubMenu implements ActionListener{
         printedText.setHorizontalAlignment(SwingConstants.LEFT);
     }
 
+    /**
+     * Sets the table which contains each word frequency, adding the titles to the dedicated panel,
+     * then the word and word frequency from both files in three columns, adding all the words from
+     * the first file then all from second file which weren't already included in the first file's list
+     */
     private void setFrequencyTable() {
         frequencyLayout = new GridLayout(0, 3);
         JLabel wordTitle = new JLabel("Word: "), fileOneTitle = new JLabel("File " + fileOneName + ":"), fileTwoTitle = new JLabel("File " + fileTwoName + ":");
@@ -104,6 +124,10 @@ public class SubMenu implements ActionListener{
         }
     }
 
+    /**
+     * Accepts the input of the text field via the confirm button, repainting the frame
+     * to show the frequencies of the word currently input in the text field
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == wordButton) {
             mainPanel.remove(findWordPanel);
@@ -114,8 +138,15 @@ public class SubMenu implements ActionListener{
         }
     }
 
+    /**
+     * Main function to produce the submenu, setting up the files and frame elements
+     * for display
+     * @param fileOneNo number of the first file
+     * @param fileTwoNo number of the second file
+     * @param givenFilePath file path to the folder containing the text files
+     * @param enteredPhraseLength the length used during phrase matching used in the main menu when this was called
+     */
     public SubMenu(int fileOneNo, int fileTwoNo, String givenFilePath, int enteredPhraseLength) {
-        System.out.println(fileOneNo + " " + fileTwoNo);
         fileOne = new WordList(givenFilePath + "/test" + fileOneNo + ".txt");
         fileOne.cleanWordList();
         fileOne.wordFrequencyCounter(true);

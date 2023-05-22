@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Prints out the main menu with an introductory text, a text field to set the minimu phrase length
+ * for phrase matching with button to set it, the phrase match percentages of every pair of files and
+ * the top 4 highest phrase match percentages
+ */
 public class MainMenu implements ActionListener{
     private String filePath;
     private JFrame frame = new JFrame();
@@ -15,6 +20,9 @@ public class MainMenu implements ActionListener{
     private int phraseCheckerMin = 4;
     private JTextField lengthEntry = new JTextField();
 
+    /**
+     * Sets up the frame of the sub menu, including title, close action, size and making it visible
+     */
     private void setFrame() {
         frame.setVisible(true);
         frame.setTitle("Plagiarism Checker");
@@ -22,6 +30,10 @@ public class MainMenu implements ActionListener{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Sets up the arrays which contain the match percentages, label to be printed on the panel and
+     * value of the phrase match (to find the top 4) for every pair of the 5 files
+     */
     private void setFilePairs() {
         WordList fileOne, fileTwo;
         PhraseMatcher matcher;
@@ -37,6 +49,11 @@ public class MainMenu implements ActionListener{
         }
     }
 
+    /**
+     * Finds the top four pairs with the highest phrase match percentages and adds them into
+     * the arrays holding the printed buttons / labels for each pair so they can be printed
+     * again in the final table containing the top four
+     */
     private void findTopFour() {
         int[] topFour = {0,0,0,0}, a = {0,0,0,0}, b = {0,0,0,0};
         int pos = -1;
@@ -83,6 +100,11 @@ public class MainMenu implements ActionListener{
         }
     }
 
+    /**
+     * Controls both when the button to change the phrase match length is pressed, setting it to the correct
+     * amount if it is an integer, and controls when a button is pressed in the file pair tables, opening the 
+     * submenu of the correlating file pair to the button (matching the text of the button)
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == lengthButton) {
             try {
@@ -110,6 +132,11 @@ public class MainMenu implements ActionListener{
         }
     }
 
+    /**
+     * Sets up the table panels for all tables, with the first five having the comparison to each other file
+     * and the final having the top four, printing them in a grid layout with the column titles at the top, 
+     * buttons for each file pair on the left and labels of the match percentage on the right
+     */
     private void setTablesPanel() {
         JLabel pairTitle, pairPercentage;
         int[] sortedOrder;
@@ -136,6 +163,11 @@ public class MainMenu implements ActionListener{
         }
     }
 
+    /**
+     * Sorts all the pairs of files for one table into descending order
+     * @param i Corrisponding number to array of file pairs to be ordered (matching the number of the first file in each pair)
+     * @return The sorted array of indexes
+     */
     private int[] sortPairsArray(int i) {
         int k, tmp;
         int[] returnArray = {0,1,2,3,4}, valueArray = {filePairValues[i][0], filePairValues[i][1],filePairValues[i][2],filePairValues[i][3],filePairValues[i][4]};
@@ -156,6 +188,11 @@ public class MainMenu implements ActionListener{
         return returnArray;
     }
 
+    /**
+     * Main method of the main menu, which sets up the arrays and adds all the elements to the main frame / panel,
+     * and sets up the file path variable for use in phrase matching
+     * @param givenFilePath File path to the folder containing the text files
+     */
     public MainMenu(String givenFilePath) {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
